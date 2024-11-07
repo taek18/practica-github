@@ -11,15 +11,14 @@ class _FormularioViewState extends State<FormularioView> {
   final TextEditingController _emailController = TextEditingController();
 
   void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-    }
+    if (_formKey.currentState!.validate()) {}
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Formulario de Ingreso'),
+        title: const Text('Formulario de Ingreso'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -29,7 +28,7 @@ class _FormularioViewState extends State<FormularioView> {
             children: <Widget>[
               TextFormField(
                 controller: _nombreController,
-                decoration: InputDecoration(labelText: 'Nombre'),
+                decoration: const InputDecoration(labelText: 'Nombre'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor ingrese su nombre';
@@ -39,7 +38,7 @@ class _FormularioViewState extends State<FormularioView> {
               ),
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration: const InputDecoration(labelText: 'Email'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor ingrese su email';
@@ -47,11 +46,20 @@ class _FormularioViewState extends State<FormularioView> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: _submitForm,
-                child: Text('Enviar'),
-              ),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    String nombre = _nombreController.text;
+                    String email = _emailController.text;
+
+                    // Llama a _mostrarDialogo dentro de una función anónima
+                    _mostrarDialogo(
+                        nombre: nombre, email: email, context: context);
+                  }
+                },
+                child: const Text('Enviar'),
+              )
             ],
           ),
         ),
@@ -65,23 +73,27 @@ class _FormularioViewState extends State<FormularioView> {
     _emailController.dispose();
     super.dispose();
   }
-  
-void _mostrarDialogo({required String nombre, required String email, required BuildContext context}) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Información Ingresada'),
-        content: Text('Nombre: $nombre\nEmail: $email'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // Cierra el diálogo
-            },
-            child: const Text('OK'),
-          ),
-        ],
-      );
-    },
-  );
+
+  void _mostrarDialogo(
+      {required String nombre,
+      required String email,
+      required BuildContext context}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Información Ingresada'),
+          content: Text('Nombre: $nombre\nEmail: $email'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
