@@ -12,11 +12,6 @@ class _FormularioViewState extends State<FormularioView> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-
-      // Puedes manejar la información ingresada aquí
-     
-      
-      // O realizar otras acciones como guardar en la base de datos
     }
   }
 
